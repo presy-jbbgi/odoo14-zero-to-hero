@@ -1,0 +1,141 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="absence_request_tree">
+            <field name="name">Absence Request list</field>
+            <field name="model">absence.request</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="days_absent"/>
+
+                    <field name="state"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="absence_request_search">
+            <field name="name">Absence Request list</field>
+            <field name="model">absence.request</field>
+            <field name="arch" type="xml">
+
+
+                <search>
+                    <field name="name" string="Name"/>
+                    <filter name="state_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="state_confirmed" string="Confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter name="state_rejected" string="Rejected" domain="[('state', '=', 'rejected')]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter name="user_id" string="User" domain="[]" context="{'group_by': 'user_id'}"/>
+                        <filter name="state" string="State" domain="[]" context="{'group_by': 'state'}"/>
+
+
+                    </group>
+                </search>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="absence_request_form">
+            <field name="name">Absence Request Form</field>
+            <field name="model">absence.request</field>
+            <field name="arch" type="xml">
+                <form>
+
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+
+                        <group>
+                            <group>
+                                <separator string="General Info"/>
+                                <field name="user_id"/>
+                                <field name="absence_reason"/>
+                            </group>
+                            <group>
+                                <separator string="Details"/>
+
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="days_absent"/>
+                            </group>
+                            <group>
+                                <separator string="Status"/>
+
+                                <field name="state"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Employee Proof">
+                                <field name="proof"/>
+
+                            </page>
+                        </notebook>
+                        <group>
+                            <button name="to_confirm" string="Confirm" type="object" states="draft"
+                                    class="btn-primary"/>
+                            <button name="to_reject" string="Reject" type="object" states="draft" class="btn-primary"/>
+                            <button name="to_draft" string="Reset" type="object" states="confirmed,rejected"
+                                    class="btn-primary"/>
+
+                        </group>
+
+                    </sheet>
+
+
+                </form>
+            </field>
+        </record>
+
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="absence_request_action_window">
+            <field name="name">Absence Request</field>
+            <field name="res_model">absence.request</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!-- server action to the one above -->
+        <!--
+            <record model="ir.actions.server" id="absence_request.action_server">
+              <field name="name">absence_request server</field>
+              <field name="model_id" ref="model_absence_request_absence_request"/>
+              <field name="state">code</field>
+              <field name="code">
+                action = {
+                  "type": "ir.actions.act_window",
+                  "view_mode": "tree,form",
+                  "res_model": model._name,
+                }
+              </field>
+            </record>
+        -->
+
+        <!-- Top menu item -->
+
+        <menuitem name="Absence Request" id="absence_request_menu_root"/>
+
+        <!-- menu categories -->
+
+        <menuitem name="Employees Request" id="absence_request_category_menu" parent="absence_request_menu_root"/>
+        <!--<menuitem name="Menu 2" id="absence_request.menu_2" parent="absence_request.menu_root"/>
+        -->
+        <!-- actions -->
+
+        <menuitem name="Requests" id="absence_request" parent="absence_request_category_menu"
+                  action="absence_request_action_window"/>
+        <!--<menuitem name="Server to list" id="absence_request" parent="absence_request.menu_2"
+                  action="absence_request.action_server"/>
+    -->
+    </data>
+</odoo>
