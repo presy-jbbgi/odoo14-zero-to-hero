@@ -2,6 +2,9 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from datetime import datetime
+
+
 
 
 class AbsenceRequest(models.Model):
@@ -10,9 +13,9 @@ class AbsenceRequest(models.Model):
 
     name = fields.Char(string="Name", default="Absence Request", required=True)
     user_id = fields.Many2one('res.users', string='User')
-    date_from = fields.Date(string='From',default=0 )
-    date_to = fields.Date(string='To', default=0)
-    days_absent = fields.Float("Absent days",default=0, compute='_get_days')
+    date_from = fields.Date(string='From', default=datetime.today())
+    date_to = fields.Date(string='To', default=datetime.today())
+    days_absent = fields.Float("Absent days", compute='_get_days')
     absence_reason = fields.Text(string='Reason')
     proof = fields.Binary('Proof')
 
